@@ -1,0 +1,25 @@
+{
+  "name": "2d-collision-detection",
+  "version": "1.0.0",
+  "description": "A HTML5 Canvas demo that detects 2D collision among randomly generated, randomly set polygons.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.5.3",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-preset-latest": "^6.16.0",
+    "clean-css": "^3.4.21",
+    "css-loader": "^0.26.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-inline-source-plugin": "0.0.3",
+    "html-webpack-plugin": "^2.24.1",
+    "postcss-loader": "^1.1.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3"
+  }
+}

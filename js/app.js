@@ -7,8 +7,5 @@ import Polygon from 'polygon';
   const pen = new Pen(canvas.getContext('2d'));
   const radius = 100;
   const polygon = Polygon.makeRandom(radius);
-  pen.draw(polygon, {
-    strokeStyle: 'yellow',
-    lineWidth: 1.5
-  });
+  pen.draw(polygon);
 })();

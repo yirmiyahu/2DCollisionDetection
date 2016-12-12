@@ -14,6 +14,7 @@
     "babel-loader": "^6.2.8",
     "babel-preset-latest": "^6.16.0",
     "clean-css": "^3.4.21",
+    "color-scheme": "0.0.5",
     "css-loader": "^0.26.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-inline-source-plugin": "0.0.3",

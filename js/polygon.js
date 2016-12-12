@@ -1,9 +1,10 @@
+import Color from 'color';
 import Edge from 'edge';
 import Vector from 'vector';
 import { isEmpty, random } from 'util';
 
 export default class {
-  constructor(vertices) {
+  constructor(vertices, config) {
     this.vertices = vertices;
     this.center = new Vector();
     this.bounds = {};
@@ -12,6 +13,8 @@ export default class {
     if (this.vertices && this.vertices.length) {
       this._initializeComponents();
     }
+
+    this._config = config;
   }
 
   _initializeComponents() {
@@ -60,6 +63,28 @@ export default class {
       vertices.push(new Vector(x, y));
     }
 
-    return new this(vertices);
+    const canvasSettings = Object.assign(this.defaultCanvasSettings,
+        this.randomColorSettings);
+    return new this(vertices, { canvasSettings });
+  }
+
+  static get defaultCanvasSettings() {
+    return {
+      _fillAlpha: 0.5,
+      _strokeAlpha: 1,
+      lineWidth: 1
+    };
+  }
+
+  static get randomColorSettings() {
+    const color = Color.generateRandom();
+    return {
+      fillStyle: color,
+      strokeStyle: color
+    };
+  }
+
+  get canvasSettings() {
+    return this._config.canvasSettings;
   }
 }

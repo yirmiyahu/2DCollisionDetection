@@ -65,7 +65,8 @@ export default class {
 
     const canvasSettings = Object.assign(this.defaultCanvasSettings,
         this.randomColorSettings);
-    return new this(vertices, { canvasSettings });
+    const movementSettings = this.randomMovementSettings;
+    return new this(vertices, { canvasSettings, movementSettings });
   }
 
   static get defaultCanvasSettings() {
@@ -84,7 +85,46 @@ export default class {
     };
   }
 
+  static get randomMovementSettings() {
+    const pn = () => { return random([-1, 1]); };
+    const randomFactor = () => { return pn() * Math.random(); };
+    const angle = Math.PI / 128;
+    const vector = 4;
+    return {
+      velocity: new Vector(randomFactor() * vector, randomFactor() * vector),
+      angle: randomFactor() * angle
+    };
+  }
+
+  static get defaultMovementSettings() {
+    return { velocity: new Vector(), angle: 0 };
+  }
+
   get canvasSettings() {
     return this._config.canvasSettings;
+  }
+
+  get movementSettings() {
+    return this._config ? this._config.movementSettings :
+      this.constructor.defaultMovementSettings;
+  }
+
+  move() {
+    if (this._config.movementSettings) {
+      const { vector, angle } = this.movementSettings;
+      const pivot = this.movementSettings.pivot || this.center;
+      const movementArgs = [vector, angle, pivot];
+
+      this._clearBounds();
+      this.center.move.apply(this.center, movementArgs);
+      this.edges.forEach((edge) => {
+        edge.move(movementArgs);
+        this._computeBoundsFrom(edge.firstPoint);
+      });
+    }
+  }
+
+  _clearBounds() {
+    this.bounds = {};
   }
 }

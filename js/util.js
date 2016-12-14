@@ -1,3 +1,7 @@
+function isNumber(numberOrNot) {
+  return typeof numberOrNot === 'number';
+}
+
 function isEmpty(objectOrArrayOrNot) {
   if (isObject(objectOrArrayOrNot)) {
     for (let key in objectOrArrayOrNot) {
@@ -36,4 +40,4 @@ function random(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-export { isEmpty, isObject, isArray, random };
+export { isNumber, isEmpty, isObject, isArray, random };

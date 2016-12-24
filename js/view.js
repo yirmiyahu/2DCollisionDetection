@@ -24,11 +24,20 @@ export default class {
     return this._bounds.max.y - this._bounds.min.y;
   }
 
+  get bounds() {
+    return this._bounds;
+  }
+
   clear() {
     this._context.clearRect(0, 0, this.width, this.height);
   }
 
   render(element) {
     this._pen.draw(element);
+    if (element.clones.length > 0) {
+      element.clones.forEach((clone) => {
+        this._pen.draw(clone);
+      });
+    }
   }
 }

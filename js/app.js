@@ -5,11 +5,13 @@ import View from 'view';
 class App {
   constructor(w, d, canvasId) {
     this.w = w;
-    this.view = new View(d, canvasId);
 
     this.elements = [];
+    this.view = new View(d, canvasId);
+
     const radius = 100;
     const polygon = Polygon.makeRandom(radius);
+    Polygon.makeTranslatedClones(polygon, this.view);
     this.elements.push(polygon);
   }
 

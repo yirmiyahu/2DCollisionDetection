@@ -9,6 +9,7 @@ export default class {
     this.center = new Vector();
     this.bounds = {};
     this.edges = [];
+    this.clones = [];
 
     if (this.vertices && this.vertices.length) {
       this._initializeComponents();
@@ -110,11 +111,19 @@ export default class {
   }
 
   move() {
-    if (this._config.movementSettings) {
-      const { vector, angle } = this.movementSettings;
-      const pivot = this.movementSettings.pivot || this.center;
-      const movementArgs = [vector, angle, pivot];
+    this.moveComponents();
+    if (this.clones.length > 0) {
+      this.clones.forEach((clone) => {
+        clone.moveComponents();
+      });
+    }
+  }
 
+  moveComponents() {
+    if (this._config && this._config.movementSettings) {
+      const { velocity, angle } = this._config.movementSettings;
+      const pivot = this._config.movementSettings.pivot || this.center;
+      const movementArgs = [velocity, angle, pivot];
       this._clearBounds();
       this.center.move.apply(this.center, movementArgs);
       this.edges.forEach((edge) => {
@@ -126,5 +135,55 @@ export default class {
 
   _clearBounds() {
     this.bounds = {};
+  }
+
+  static makeTranslatedClones(polygon, view) {
+    const viewVector = view.bounds.max;
+    const vectors = this._computeCloneVectors(polygon, viewVector);
+    if (vectors) {
+      vectors.forEach((vector) => {
+        this._replicate(polygon, vector);
+      });
+    }
+  }
+
+  static _computeCloneVectors(polygon, viewVector) {
+    if (polygon.movementSettings) {
+      const vectors = [];
+
+      const multipliers = [-1, 0, 1];
+      multipliers.forEach((x) => {
+        multipliers.forEach((y) => {
+          if (!(x === 0 && y === 0)) {
+            const vector = new Vector(viewVector.x * x, viewVector.y * y);
+            vectors.push(vector);
+          }
+        });
+      });
+
+      return vectors;
+    }
+  }
+
+  static _replicate(polygon, translationVector) {
+    if (translationVector) {
+      polygon.clone(translationVector);
+    }
+  }
+
+  clone(translationVector) {
+    const clonedVertices = this._cloneVertices(translationVector);
+    this.clones.push(new this.constructor(clonedVertices, this._config));
+  }
+
+  _cloneVertices(translationVector) {
+    return this.vertices.map((vertex) => {
+      const { x, y } = vertex;
+      const clonedVertex = new Vector(x, y);
+      if (translationVector) {
+        clonedVertex.add(translationVector);
+      }
+      return clonedVertex;
+    });
   }
 }

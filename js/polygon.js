@@ -10,6 +10,7 @@ export default class {
     this.bounds = {};
     this.edges = [];
     this.clones = [];
+    this.inContact = false;
 
     if (this.vertices && this.vertices.length) {
       this._initializeComponents();
@@ -178,7 +179,10 @@ export default class {
 
   clone(translationVector) {
     const clonedVertices = this._cloneVertices(translationVector);
-    this.clones.push(new this.constructor(clonedVertices, this._config));
+    const clone = new this.constructor(clonedVertices, this._config);
+    clone.inContact = this.inContact;
+    this.clones.push(clone);
+    return clone;
   }
 
   _cloneVertices(translationVector) {
@@ -204,5 +208,30 @@ export default class {
     return this.vertices.some((vertex) => {
       return vertex.inside(other);
     });
+  }
+
+  static areTouching(polygon, other) {
+    return polygon.intersects(other) || polygon.inside(other) ||
+      other.inside(polygon);
+  }
+
+  static flag(collection) {
+    collection.forEach((polygon) => {
+      polygon.flag();
+    });
+  }
+
+  flag() {
+    this.inContact = true;
+  }
+
+  static unflag(collection) {
+    collection.forEach((polygon) => {
+      polygon.unflag();
+    });
+  }
+
+  unflag() {
+    this.inContact = false;
   }
 }

@@ -1,4 +1,5 @@
 import Pen from 'pen';
+import Polygon from 'polygon';
 import Vector from 'vector';
 
 export default class {
@@ -56,5 +57,32 @@ export default class {
 
   hasOverlapping(element) {
     return !this.hasLost(element) && !this.contains(element);
+  }
+
+  checkForCollisions(elements) {
+    outer: for (let i = 0; i < elements.length; i++) {
+      const collection = elements[i].clones.concat(elements[i]);
+      Polygon.unflag(collection);
+
+      inner: for (let j = 0; j < elements.length; j++) {
+        if (i === j) {
+          continue inner;
+        }
+
+        const other = elements[j].clones.concat(elements[j]);
+        if (this._collisionBetween(collection, other)) {
+          Polygon.flag(collection);
+          continue outer;
+        }
+      }
+    }
+  }
+
+  _collisionBetween(collection, other) {
+    return collection.some((element) => {
+      return other.some((other) => {
+        return Polygon.areTouching(element, other);
+      });
+    });
   }
 }

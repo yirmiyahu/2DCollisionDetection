@@ -28,6 +28,7 @@ class App {
 
   _tick() {
     this.view.clear();
+    this.view.checkForCollisions(this.elements);
     this.elements.forEach((element, i, collection) => {
       this.view.render(element);
       element.move();

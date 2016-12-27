@@ -1,3 +1,5 @@
+import Polygon from 'polygon';
+
 export default class Pen {
   constructor(ctx) {
     this._ctx = ctx;
@@ -11,7 +13,11 @@ export default class Pen {
   }
 
   _setup(object) {
-    Object.assign(this._ctx, object.canvasSettings);
+    if (object.inContact) {
+      Object.assign(this._ctx, Polygon.glowCanvasSettings);
+    } else {
+      Object.assign(this._ctx, object.canvasSettings);
+    }
   }
 
   _strokeAndFill(polygon) {

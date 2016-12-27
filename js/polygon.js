@@ -64,13 +64,13 @@ export default class {
       vertices.push(new Vector(x, y));
     }
 
-    const canvasSettings = Object.assign(this.defaultCanvasSettings,
-        this.randomColorSettings);
+    const canvasSettings = Object.assign(this.paintSettings,
+        this.colorSettings());
     const movementSettings = this.randomMovementSettings;
     return new this(vertices, { canvasSettings, movementSettings });
   }
 
-  static get defaultCanvasSettings() {
+  static get paintSettings() {
     return {
       _fillAlpha: 0.5,
       _strokeAlpha: 1,
@@ -78,12 +78,17 @@ export default class {
     };
   }
 
-  static get randomColorSettings() {
-    const color = Color.generateRandom();
+  static colorSettings(colorString) {
+    const color = colorString || Color.generateRandom();
     return {
       fillStyle: color,
       strokeStyle: color
     };
+  }
+
+  static get glowCanvasSettings() {
+    const glowColor = '#e80058';
+    return Object.assign(this.paintSettings, this.colorSettings(glowColor));
   }
 
   static get randomMovementSettings() {

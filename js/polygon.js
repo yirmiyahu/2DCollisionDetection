@@ -5,51 +5,81 @@ import { isEmpty, random } from 'util';
 
 export default class {
   constructor(vertices, config) {
-    this.vertices = vertices;
-    this.center = new Vector();
-    this.bounds = {};
-    this.edges = [];
-    this.clones = [];
-    this.inContact = false;
+    this._vertices = vertices;
+    this._center = new Vector();
+    this._bounds = {};
+    this._edges = [];
+    this._clones = [];
 
-    if (this.vertices && this.vertices.length) {
+    if (this._vertices && this._vertices.length > 2) {
       this._initializeComponents();
     }
 
-    this._config = config;
+    this._setup(config);
+  }
+
+  get vertices() {
+    return this._vertices;
+  }
+
+  get center() {
+    return this._center;
+  }
+
+  get bounds() {
+    return this._bounds;
+  }
+
+  get edges() {
+    return this._edges;
+  }
+
+  get clones() {
+    return this._clones;
   }
 
   _initializeComponents() {
-    this.vertices.forEach((vertex, i, arr) => {
+    this._vertices.forEach((vertex, i, arr) => {
       this._computeCenterFrom(vertex, arr);
       this._computeBoundsFrom(vertex);
-      this._buildEdgeFrom(vertex, arr[(i + 1) % arr.length]);
+      const nextRollingIdx = (i + 1) % arr.length;
+      this._buildEdgeFrom(vertex, arr[nextRollingIdx]);
     });
   }
 
   _computeCenterFrom(vertex, arr) {
-    this.center.add(vertex);
-    if (vertex === arr[arr.length - 1]) {
-      this.center.divide(arr.length);
+    this._center.add(vertex);
+    const lastIdx = arr.length - 1;
+    if (vertex === arr[lastIdx]) {
+      this._center.divide(arr.length);
     }
   }
 
   _computeBoundsFrom(vertex) {
-    if (isEmpty(this.bounds)) {
+    if (isEmpty(this._bounds)) {
       this._initializeBounds(vertex);
     } else {
-      this.bounds.min.min(vertex);
-      this.bounds.max.max(vertex);
+      this._bounds.min.min(vertex);
+      this._bounds.max.max(vertex);
     }
   }
 
   _initializeBounds(vertex) {
-    this.bounds.min = new Vector(vertex.x, vertex.y);
-    this.bounds.max = new Vector(vertex.x, vertex.y);
+    this._bounds.min = new Vector(vertex.x, vertex.y);
+    this._bounds.max = new Vector(vertex.x, vertex.y);
   }
 
   _buildEdgeFrom(vertex, otherVertex) {
-    this.edges.push(new Edge(vertex, otherVertex));
+    this._edges.push(new Edge(vertex, otherVertex));
+  }
+
+  _setup(config) {
+    if (config) {
+      const { inContact, ...settings } = config;
+      this._config = settings;
+      this.inContact = inContact || false;
+    }
+  }
 
   static makeRandom(view) {
     const vertices = this._generateVertices(view);
@@ -99,14 +129,21 @@ export default class {
     };
   }
 
+  static get boundsCanvasSettings() {
+    return {
+      strokeStyle: '#666',
+      lineWidth: 0.5
+    };
+  }
+
   static get glowCanvasSettings() {
     const glowColor = '#e80058';
     return Object.assign(this.paintSettings, this.colorSettings(glowColor));
   }
 
   static get randomMovementSettings() {
-    const pn = () => { return random([-1, 1]); };
-    const randomFactor = () => { return pn() * Math.random(); };
+    const posOrNeg = () => { return random([-1, 1]); };
+    const randomFactor = () => { return posOrNeg() * Math.random(); };
     const angle = Math.PI / 128;
     const vector = 4;
     return {
@@ -130,8 +167,8 @@ export default class {
 
   move() {
     this.moveComponents();
-    if (this.clones.length > 0) {
-      this.clones.forEach((clone) => {
+    if (this._clones.length > 0) {
+      this._clones.forEach((clone) => {
         clone.moveComponents();
       });
     }
@@ -140,11 +177,11 @@ export default class {
   moveComponents() {
     if (this._config && this._config.movementSettings) {
       const { velocity, angle } = this._config.movementSettings;
-      const pivot = this._config.movementSettings.pivot || this.center;
+      const pivot = this._config.movementSettings.pivot || this._center;
       const movementArgs = [velocity, angle, pivot];
       this._clearBounds();
-      this.center.move.apply(this.center, movementArgs);
-      this.edges.forEach((edge) => {
+      this._center.move.apply(this._center, movementArgs);
+      this._edges.forEach((edge) => {
         edge.move(movementArgs);
         this._computeBoundsFrom(edge.firstPoint);
       });
@@ -152,10 +189,11 @@ export default class {
   }
 
   _clearBounds() {
-    this.bounds = {};
+    this._bounds = {};
   }
 
   static makeTranslatedClones(polygon, view) {
+    this._clearClones(polygon);
     const viewVector = view.bounds.max;
     const vectors = this._computeCloneVectors(polygon, viewVector);
     if (vectors) {
@@ -163,6 +201,16 @@ export default class {
         this._replicate(polygon, vector);
       });
     }
+  }
+
+  static _clearClones(polygon) {
+    if (polygon.clones && polygon.clones.length > 0) {
+      polygon.clearClones();
+    }
+  }
+
+  clearClones() {
+    this._clones = [];
   }
 
   static _computeCloneVectors(polygon, viewVector) {
@@ -192,13 +240,12 @@ export default class {
   clone(translationVector) {
     const clonedVertices = this._cloneVertices(translationVector);
     const clone = new this.constructor(clonedVertices, this._config);
-    clone.inContact = this.inContact;
-    this.clones.push(clone);
+    this._clones.push(clone);
     return clone;
   }
 
   _cloneVertices(translationVector) {
-    return this.vertices.map((vertex) => {
+    return this._vertices.map((vertex) => {
       const { x, y } = vertex;
       const clonedVertex = new Vector(x, y);
       if (translationVector) {
@@ -209,7 +256,7 @@ export default class {
   }
 
   intersects(other) {
-    return this.edges.some((edge) => {
+    return this._edges.some((edge) => {
       return other.edges.some((otherEdge) => {
         return Edge.intersects(edge, otherEdge);
       });
@@ -217,7 +264,7 @@ export default class {
   }
 
   inside(other) {
-    return this.vertices.some((vertex) => {
+    return this._vertices.some((vertex) => {
       return vertex.inside(other);
     });
   }

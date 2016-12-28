@@ -13,11 +13,9 @@ export default class Pen {
   }
 
   _setup(object) {
-    if (object.inContact) {
-      Object.assign(this._ctx, Polygon.glowCanvasSettings);
-    } else {
-      Object.assign(this._ctx, object.canvasSettings);
-    }
+    const canvasSettings = object.inContact ? Polygon.glowCanvasSettings :
+      object.canvasSettings;
+    Object.assign(this._ctx, canvasSettings);
   }
 
   _strokeAndFill(polygon) {
@@ -39,8 +37,7 @@ export default class Pen {
 
   _strokeBounds(polygon) {
     const { min, max } = polygon.bounds;
-    this._ctx.strokeStyle = '#efefef';
-    this._ctx.lineWidth = 0.5;
+    Object.assign(this._ctx, Polygon.boundsCanvasSettings);
     this._ctx.strokeRect(min.x, min.y, max.x - min.x, max.y - min.y);
   }
 

@@ -3,11 +3,25 @@ import Polygon from 'polygon';
 import Vector from 'vector';
 
 export default class {
-  constructor(d, canvasId) {
+  constructor(w, d, canvasId) {
+    this._initializeCanvas(w, d, canvasId);
+    this._initializePen();
+  }
+
+  _initializeCanvas(w, d, canvasId) {
     this._canvas = d.getElementById(canvasId);
     this._context = this._canvas.getContext('2d');
+    this.sizeCanvas(w);
+  }
+
+  sizeCanvas(w) {
+    this._setCanvasSize(w);
     this._setBounds();
-    this._pen = new Pen(this._context);
+  }
+
+  _setCanvasSize(w) {
+    this._canvas.width = w.innerWidth;
+    this._canvas.height = w.innerHeight;
   }
 
   _setBounds() {
@@ -15,6 +29,10 @@ export default class {
       min: new Vector(),
       max: new Vector(this._canvas.width, this._canvas.height),
     };
+  }
+
+  _initializePen() {
+    this._pen = new Pen(this._context);
   }
 
   get width() {

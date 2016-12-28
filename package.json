@@ -12,6 +12,7 @@
     "autoprefixer": "^6.5.3",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
+    "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "babel-preset-latest": "^6.16.0",
     "clean-css": "^3.4.21",
     "color-scheme": "0.0.5",

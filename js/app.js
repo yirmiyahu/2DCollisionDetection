@@ -1,20 +1,27 @@
 import 'css/styles.css';
 import Polygon from 'polygon';
 import View from 'view';
+import { debounce } from 'util';
 
 class App {
   constructor(w, d, canvasId) {
-    this._assignWindow(w);
-    this._initializeView(w, d, canvasId);
+    this._assignContexts(w, d);
+    this._initializeView(canvasId);
     this._constructElements();
+    this._addResizeListener();
   }
 
-  _assignWindow(w) {
+  _assignContexts(w, d) {
     this._w = w;
+    this._d = d;
   }
 
-  _initializeView(w, d, canvasId) {
-    this._view = new View(w, d, canvasId);
+  get d() {
+    return this._d;
+  }
+
+  _initializeView(canvasId) {
+    this._view = new View(this._w, this._d, canvasId);
   }
 
   _constructElements() {
@@ -30,6 +37,23 @@ class App {
   _createElement() {
     const polygon = Polygon.makeRandom(this._view);
     this._elements.push(polygon);
+  }
+
+  _addResizeListener() {
+    this._w.addEventListener('resize', debounce(() => {
+      this._resizeView();
+    }, 250));
+  }
+
+  _resizeView() {
+    this._view.sizeCanvas(this._w) ;
+    this._recalibrateElements();
+  }
+
+  _recalibrateElements() {
+    this._elements.forEach((element) => {
+      Polygon.makeTranslatedClones(element, this._view);
+    });
   }
 
   run() {

@@ -2,33 +2,33 @@ function inRange(number, lower, upper) {
   return number >= lower && number <= upper;
 }
 
-function isNumber(numberOrNot) {
-  return typeof numberOrNot === 'number';
+function isNumber(arg) {
+  return typeof arg === 'number';
 }
 
-function isEmpty(objectOrArrayOrNot) {
-  if (isObject(objectOrArrayOrNot)) {
-    for (let key in objectOrArrayOrNot) {
-      if (objectOrArrayOrNot.hasOwnProperty(key)) {
+function isEmpty(arg) {
+  if (isObject(arg)) {
+    for (let key in arg) {
+      if (arg.hasOwnProperty(key)) {
         return false;
       }
     }
     return true;
   }
 
-  if (isArray(objectOrArrayOrNot)) {
-    return objectOrArrayOrNot.length === 0;
+  if (isArray(arg)) {
+    return arg.length === 0;
   }
 
   return null;
 }
 
-function isObject(objectOrNot) {
-  return objectOrNot !== null && typeof objectOrNot === 'object';
+function isObject(arg) {
+  return arg !== null && typeof arg === 'object';
 }
 
-function isArray(arrayOrNot) {
-  return arrayOrNot instanceof Array;
+function isArray(arg) {
+  return arg instanceof Array;
 }
 
 function random(min, max) {
@@ -44,4 +44,25 @@ function random(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-export { inRange, isNumber, isEmpty, isObject, isArray, random };
+function debounce(func, wait, immediate) {
+  let timeout;
+  return () => {
+    const args = arguments;
+    const later = () => {
+      timeout = null;
+      if (!immediate) {
+        func.apply(this, args);
+      }
+    };
+
+    const callNow = immediate && !timeout;
+    if (callNow) {
+      func.apply(this, args);
+    } else {
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    }
+  };
+}
+
+export { inRange, isNumber, isEmpty, isObject, isArray, random, debounce };

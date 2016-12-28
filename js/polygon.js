@@ -50,25 +50,37 @@ export default class {
 
   _buildEdgeFrom(vertex, otherVertex) {
     this.edges.push(new Edge(vertex, otherVertex));
-  }
 
-  static makeRandom(radius) {
-    const vertices = [];
-    const verticesCount = random(4, 12);
-    const angleSeparation = 2 * Math.PI / verticesCount;
-
-    for (let i = 0, angle, x, y, variance; i < verticesCount; i++) {
-      angle = angleSeparation * (i + 1);
-      variance = 1.5 - Math.random();
-      x = variance * radius * Math.cos(angle);
-      y = variance * radius * Math.sin(angle);
-      vertices.push(new Vector(x, y));
-    }
-
+  static makeRandom(view) {
+    const vertices = this._generateVertices(view);
     const canvasSettings = Object.assign(this.paintSettings,
         this.colorSettings());
     const movementSettings = this.randomMovementSettings;
-    return new this(vertices, { canvasSettings, movementSettings });
+    const polygon = new this(vertices, { canvasSettings, movementSettings });
+
+    if (view) {
+      this.makeTranslatedClones(polygon, view);
+    }
+
+    return polygon;
+  }
+
+  static _generateVertices(view) {
+    const vertices = [];
+    const canvasLocation = view ? view.generateRandomLocation() : new Vector();
+    const randomRadius = random(75, 100);
+    const verticesCount = random(3, 12);
+    const angleSeparation = 2 * Math.PI / verticesCount;
+
+    for (let i = 0; i < verticesCount; i++) {
+      const angle = angleSeparation * (i + 1);
+      const variance = 1.5 - Math.random();
+      const x = variance * randomRadius * Math.cos(angle) + canvasLocation.x;
+      const y = variance * randomRadius * Math.sin(angle) + canvasLocation.y;
+      vertices.push(new Vector(x, y));
+    }
+
+    return vertices;
   }
 
   static get paintSettings() {

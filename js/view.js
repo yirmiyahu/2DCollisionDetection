@@ -85,4 +85,11 @@ export default class {
       });
     });
   }
+
+  generateRandomLocation() {
+    const { random } = Math;
+    const x = random() * this.width;
+    const y = random() * this.height;
+    return new Vector(x, y);
+  }
 }

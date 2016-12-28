@@ -30,9 +30,9 @@ export default class Pen {
   _drawVertices(polygon) {
     const [ first, ...rest ] = polygon.vertices;
     this._ctx.beginPath();
-    this._ctx.moveTo(first.x + 300, first.y + 300);
+    this._ctx.moveTo(first.x, first.y);
     rest.forEach((vertex) => {
-      this._ctx.lineTo(vertex.x + 300, vertex.y + 300);
+      this._ctx.lineTo(vertex.x, vertex.y);
     });
     this._ctx.closePath();
   }
@@ -41,7 +41,7 @@ export default class Pen {
     const { min, max } = polygon.bounds;
     this._ctx.strokeStyle = '#efefef';
     this._ctx.lineWidth = 0.5;
-    this._ctx.strokeRect(min.x + 300, min.y + 300, max.x - min.x, max.y - min.y);
+    this._ctx.strokeRect(min.x, min.y, max.x - min.x, max.y - min.y);
   }
 
   _fill() {

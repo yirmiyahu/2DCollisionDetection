@@ -1,4 +1,5 @@
 import 'css/styles.css';
+import Panel from 'panel';
 import Polygon from 'polygon';
 import View from 'view';
 import { debounce } from 'util';
@@ -8,6 +9,7 @@ class App {
     this._assignContexts(w, d);
     this._initializeView(canvasId);
     this._constructElements();
+    this._initializePanel();
     this._addResizeListener();
   }
 
@@ -37,6 +39,25 @@ class App {
   _createElement() {
     const polygon = Polygon.makeRandom(this._view);
     this._elements.push(polygon);
+  }
+
+  _destroyElement() {
+    this._elements = this._elements.splice(1);
+  }
+
+  _initializePanel() {
+    this._panel = new Panel(this);
+  }
+
+  routeMessage(message, value) {
+    this.panelMessageRouter[message](value);
+  }
+
+  get panelMessageRouter() {
+    return {
+      addElement: this._createElement.bind(this),
+      removeElement: this._destroyElement.bind(this)
+    };
   }
 
   _addResizeListener() {

@@ -57,7 +57,8 @@ class App {
     return {
       addElement: this._createElement.bind(this),
       removeElement: this._destroyElement.bind(this),
-      toggleBackdrop: this._toggleCanvasBackground.bind(this)
+      toggleBackdrop: this._toggleCanvasBackground.bind(this),
+      toggleBoundingBoxes: this._toggleRenderingBounds.bind(this)
     };
   }
 
@@ -93,6 +94,10 @@ class App {
         classList.remove(className);
       }
     });
+  }
+
+  _toggleRenderingBounds(checked) {
+    this._view.toggleRenderingBounds(checked);
   }
 
   run() {

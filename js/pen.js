@@ -5,10 +5,12 @@ export default class Pen {
     this._ctx = ctx;
   }
 
-  draw(polygon) {
+  draw(polygon, ignoreBounds) {
     this._ctx.save();
     this._strokeAndFill(polygon);
-    this._strokeBounds(polygon);
+    if (!ignoreBounds) {
+      this._strokeBounds(polygon);
+    }
     this._ctx.restore();
   }
 

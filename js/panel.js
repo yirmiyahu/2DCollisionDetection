@@ -26,6 +26,9 @@ export default class {
       checkboxes: [{
         selector: '#toggle-backdrop',
         message: 'toggleBackdrop'
+      }, {
+        selector: '#toggle-bounding-boxes',
+        message: 'toggleBoundingBoxes'
       }]
     };
   }

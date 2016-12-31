@@ -52,10 +52,10 @@ export default class {
   }
 
   render(element) {
-    this._pen.draw(element);
+    this._pen.draw(element, this._ignoreBounds);
     if (element.clones.length > 0) {
       element.clones.forEach((clone) => {
-        this._pen.draw(clone);
+        this._pen.draw(clone, this._ignoreBounds);
       });
     }
   }
@@ -119,5 +119,9 @@ export default class {
     } else {
       classList.remove(className);
     }
+  }
+
+  toggleRenderingBounds(checked) {
+    this._ignoreBounds = checked ? false : true;
   }
 }

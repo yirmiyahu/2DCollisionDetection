@@ -5,26 +5,28 @@ export default class Pen {
     this._ctx = ctx;
   }
 
-  draw(polygon, ignoreBounds) {
+  draw(polygon, config) {
+    const { ignoreBounds, customGlowSettings } = config;
     this._ctx.save();
-    this._strokeAndFill(polygon);
+    this._strokeAndFill(polygon, customGlowSettings);
     if (!ignoreBounds) {
       this._strokeBounds(polygon);
     }
     this._ctx.restore();
   }
 
-  _setup(object) {
-    const canvasSettings = object.inContact ? Polygon.glowCanvasSettings :
-      object.canvasSettings;
-    Object.assign(this._ctx, canvasSettings);
-  }
-
-  _strokeAndFill(polygon) {
-    this._setup(polygon);
+  _strokeAndFill(polygon, customGlowSettings) {
+    this._setup(polygon, customGlowSettings);
     this._drawVertices(polygon);
     this._fill();
     this._stroke();
+  }
+
+  _setup(object, customGlowSettings) {
+    const glowSettings = customGlowSettings || Polygon.glowCanvasSettings;
+    const canvasSettings = object.inContact ? glowSettings :
+      object.canvasSettings;
+    Object.assign(this._ctx, canvasSettings);
   }
 
   _drawVertices(polygon) {

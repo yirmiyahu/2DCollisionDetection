@@ -1,4 +1,4 @@
-import { isFunction } from 'util';
+import { debounce, isFunction } from 'util';
 
 export default class {
   constructor(engine) {
@@ -11,6 +11,10 @@ export default class {
     this.panelItems.checkboxes.forEach((item) => {
       const { selector, message } = item;
       this._activateCheckbox(selector, message);
+    });
+    this.panelItems.textInputs.forEach((item) => {
+      const { selector, message } = item;
+      this._activateTextInput(selector, message);
     });
   }
 
@@ -29,6 +33,10 @@ export default class {
       }, {
         selector: '#toggle-bounding-boxes',
         message: 'toggleBoundingBoxes'
+      }],
+      textInputs: [{
+        selector: '#custom-collision-color',
+        message: 'changeCollisionColor'
       }]
     };
   }
@@ -43,6 +51,13 @@ export default class {
     const getValue = () => { return checkbox.checked; };
     checkbox.addEventListener('click', this._notifyEngine.bind(this, { message, getValue }));
   }
+
+  _activateTextInput(selector, message) {
+    const textInput = this._engine.d.querySelector(selector);
+    const getValue = () => { return textInput.value; };
+    textInput.addEventListener('keyup', debounce(() => {
+      this._notifyEngine({ message, getValue });
+    }, 250));
   }
 
   _notifyEngine(params) {

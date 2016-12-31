@@ -58,7 +58,8 @@ class App {
       addElement: this._createElement.bind(this),
       removeElement: this._destroyElement.bind(this),
       toggleBackdrop: this._toggleCanvasBackground.bind(this),
-      toggleBoundingBoxes: this._toggleRenderingBounds.bind(this)
+      toggleBoundingBoxes: this._toggleRenderingBounds.bind(this),
+      changeCollisionColor: this._applyCustomGlowSettings.bind(this)
     };
   }
 
@@ -98,6 +99,10 @@ class App {
 
   _toggleRenderingBounds(checked) {
     this._view.toggleRenderingBounds(checked);
+  }
+
+  _applyCustomGlowSettings(hexColor) {
+    this._view.applyCustomGlowSettings(hexColor);
   }
 
   run() {

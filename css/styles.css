@@ -31,7 +31,7 @@ html, body {
   background-color: #333;
 }
 
-.panel__checkbox-container {
+.panel__input-container {
   display: inline-block;
   margin: 2rem 1rem;
 }
@@ -62,4 +62,18 @@ input[type="checkbox"]:checked + label:before {
   color: #333;
   content: "\2714";
   text-align: center;
+}
+
+.panel__text-input {
+  border: 1px solid #eee;
+  border-radius: 0.1rem;
+  background-color: #eee;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  outline: none;
+  font: 1rem 'Roboto';
+}
+
+#custom-collision-color {
+  width: 7rem;
 }

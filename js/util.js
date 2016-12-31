@@ -69,12 +69,18 @@ function debounce(func, wait, immediate) {
   };
 }
 
+function isHexColor(string) {
+  const hexColorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/i;
+  return hexColorRegex.test(string);
+}
+
 export {
   debounce,
   inRange,
   isArray,
   isEmpty,
   isFunction,
+  isHexColor,
   isNumber,
   isObject,
   random

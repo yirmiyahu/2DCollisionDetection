@@ -1,6 +1,7 @@
 import Pen from 'pen';
 import Polygon from 'polygon';
 import Vector from 'vector';
+import { isHexColor } from 'util';
 
 export default class {
   constructor(w, d, canvasId) {
@@ -52,10 +53,14 @@ export default class {
   }
 
   render(element) {
-    this._pen.draw(element, this._ignoreBounds);
+    const drawConfig = {
+      ignoreBounds: this._ignoreBounds,
+      customGlowSettings: this._customGlowSettings
+    };
+    this._pen.draw(element, drawConfig);
     if (element.clones.length > 0) {
       element.clones.forEach((clone) => {
-        this._pen.draw(clone, this._ignoreBounds);
+        this._pen.draw(clone, drawConfig);
       });
     }
   }
@@ -123,5 +128,27 @@ export default class {
 
   toggleRenderingBounds(checked) {
     this._ignoreBounds = checked ? false : true;
+  }
+
+  applyCustomGlowSettings(colorString) {
+    const hexColor = this._ensureHashSymbol(colorString);
+    if (isHexColor(hexColor)) {
+      this._assignCustomGlowSettings(hexColor);
+    } else {
+      this._removeCustomGlowSettings();
+    }
+  }
+
+  _ensureHashSymbol(string) {
+    return string[0] !== '#' ? `#${string}` : string;
+  }
+
+  _assignCustomGlowSettings(hexColor) {
+    this._customGlowSettings = Object.assign({}, Polygon.paintSettings,
+      Polygon.colorSettings(hexColor));
+  }
+
+  _removeCustomGlowSettings() {
+    delete this._customGlowSettings;
   }
 }

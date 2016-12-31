@@ -56,7 +56,8 @@ class App {
   get panelMessageRouter() {
     return {
       addElement: this._createElement.bind(this),
-      removeElement: this._destroyElement.bind(this)
+      removeElement: this._destroyElement.bind(this),
+      toggleBackdrop: this._toggleCanvasBackground.bind(this)
     };
   }
 
@@ -74,6 +75,23 @@ class App {
   _recalibrateElements() {
     this._elements.forEach((element) => {
       Polygon.makeTranslatedClones(element, this._view);
+    });
+  }
+
+  _toggleCanvasBackground(checked) {
+    this._view.toggleCanvasBackground(checked);
+    this._changeLabelColor(checked);
+  }
+
+  _changeLabelColor(checked) {
+    this._d.querySelectorAll('label').forEach((label) => {
+      const classList = label.classList;
+      const className = 'panel__checkbox-label--readable';
+      if (checked) {
+        classList.add(className);
+      } else {
+        classList.remove(className);
+      }
     });
   }
 

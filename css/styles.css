@@ -26,3 +26,40 @@ html, body {
 .panel__button:active {
   background-color: #ccc;
 }
+
+.canvas__backdrop {
+  background-color: #333;
+}
+
+.panel__checkbox-container {
+  display: inline-block;
+  margin: 2rem 1rem;
+}
+
+.panel__checkbox-label--readable {
+  color: #fff;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + label:before {
+  border: 1px solid #eee;
+  border-radius: 0.1rem;
+  background-color: #eee;
+  content: "\00a0";
+  display: inline-block;
+  height: 1rem;
+  margin-right: 0.5rem;
+  padding: 0;
+  vertical-align: top;
+  width: 1rem;
+}
+
+input[type="checkbox"]:checked + label:before {
+  background-color: #eee;
+  color: #333;
+  content: "\2714";
+  text-align: center;
+}

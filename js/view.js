@@ -110,4 +110,14 @@ export default class {
     const y = random() * this.height;
     return new Vector(x, y);
   }
+
+  toggleCanvasBackground(checked) {
+    const classList = this._canvas.classList;
+    const className = 'canvas__backdrop';
+    if (checked) {
+      classList.add(className);
+    } else {
+      classList.remove(className);
+    }
+  }
 }

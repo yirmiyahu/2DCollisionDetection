@@ -1,3 +1,7 @@
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+
 function inRange(number, lower, upper) {
   return number >= lower && number <= upper;
 }
@@ -65,4 +69,13 @@ function debounce(func, wait, immediate) {
   };
 }
 
-export { inRange, isNumber, isEmpty, isObject, isArray, random, debounce };
+export {
+  debounce,
+  inRange,
+  isArray,
+  isEmpty,
+  isFunction,
+  isNumber,
+  isObject,
+  random
+};

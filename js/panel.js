@@ -1,3 +1,5 @@
+import { isFunction } from 'util';
+
 export default class {
   constructor(engine) {
     this._engine = engine;
@@ -5,6 +7,10 @@ export default class {
     this.panelItems.buttons.forEach((item) => {
       const { selector, message } = item;
       this._activateButton(selector, message);
+    });
+    this.panelItems.checkboxes.forEach((item) => {
+      const { selector, message } = item;
+      this._activateCheckbox(selector, message);
     });
   }
 
@@ -16,16 +22,32 @@ export default class {
       }, {
         selector: '.panel__remove-element',
         message: 'removeElement'
+      }],
+      checkboxes: [{
+        selector: '#toggle-backdrop',
+        message: 'toggleBackdrop'
       }]
     };
   }
 
   _activateButton(selector, message) {
     const button = this._engine.d.querySelector(selector);
-    button.addEventListener('click', this._notifyEngine.bind(this, message));
+    button.addEventListener('click', this._notifyEngine.bind(this, { message }));
   }
 
-  _notifyEngine(message) {
-    this._engine.routeMessage(message);
+  _activateCheckbox(selector, message) {
+    const checkbox = this._engine.d.querySelector(selector);
+    const getValue = () => { return checkbox.checked; };
+    checkbox.addEventListener('click', this._notifyEngine.bind(this, { message, getValue }));
+  }
+  }
+
+  _notifyEngine(params) {
+    const { message, getValue } = params;
+    let value;
+    if (params.getValue && isFunction(params.getValue)) {
+      value = getValue();
+    }
+    this._engine.routeMessage(message, value);
   }
 }

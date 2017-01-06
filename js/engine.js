@@ -48,6 +48,8 @@ export default class {
       element.move();
       this._handlePossibleSuccession(element, i, collection);
     });
+
+    this._view.replaceCanvasContext();
   }
 
   _checkForCollisions() {
@@ -92,7 +94,7 @@ export default class {
   }
 
   resizeView() {
-    this._view.sizeCanvas(this._w) ;
+    this._view.resizeCanvas(this._w, this._d);
     this._recalibrateElements();
   }
 

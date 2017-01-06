@@ -5,19 +5,30 @@ import { isHexColor } from 'util';
 
 export default class {
   constructor(w, d, canvasId) {
-    this._initializeCanvas(w, d, canvasId);
+    this._initializeCanvases(w, d, canvasId);
     this._initializePen();
   }
 
-  _initializeCanvas(w, d, canvasId) {
-    this._canvas = d.getElementById(canvasId);
-    this._context = this._canvas.getContext('2d');
-    this.sizeCanvas(w);
+  _initializeCanvases(w, d, canvasId) {
+    this._createCanvas(d, canvasId);
+    this._sizeCanvas(w);
+    this._createOffscreenCanvas(d);
   }
 
-  sizeCanvas(w) {
+  _createCanvas(d, canvasId) {
+    this._canvas = d.getElementById(canvasId);
+    this._context = this._canvas.getContext('2d');
+  }
+
+  _sizeCanvas(w) {
     this._setCanvasSize(w);
     this._setBounds();
+  }
+
+  resizeCanvas(w, d) {
+    this._sizeCanvas(w);
+    this._createOffscreenCanvas(d);
+    this._pen.switchContext(this._offscreenContext);
   }
 
   _setCanvasSize(w) {
@@ -32,8 +43,18 @@ export default class {
     };
   }
 
+  _createOffscreenCanvas(d) {
+    const { width, height, id } = this._canvas;
+    const offscreen = d.createElement('canvas');
+    offscreen.width = width;
+    offscreen.height = height;
+    offscreen.id = id;
+    this._offscreenCanvas = offscreen;
+    this._offscreenContext = this._offscreenCanvas.getContext('2d');
+  }
+
   _initializePen() {
-    this._pen = new Pen(this._context);
+    this._pen = new Pen(this._offscreenContext);
   }
 
   get width() {
@@ -50,6 +71,11 @@ export default class {
 
   clear() {
     this._context.clearRect(0, 0, this.width, this.height);
+    this._offscreenContext.clearRect(0, 0, this.width, this.height);
+  }
+
+  replaceCanvasContext() {
+    this._context.drawImage(this._offscreenCanvas, 0, 0);
   }
 
   render(element) {

@@ -58,4 +58,8 @@ export default class Pen {
     this._ctx.globalAlpha = this._ctx._strokeAlpha;
     this._ctx.stroke();
   }
+
+  switchContext(ctx) {
+    this._ctx = ctx;
+  }
 }

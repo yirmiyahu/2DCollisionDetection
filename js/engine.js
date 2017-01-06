@@ -26,6 +26,7 @@ export default class {
   }
 
   static get elementsCount() {
+    return 5;
   }
 
   run() {
@@ -75,9 +76,13 @@ export default class {
 
   _collisionBetween(collection, other) {
     return collection.some((element) => {
-      return other.some((other) => {
-        return Polygon.areTouching(element, other);
-      });
+      if (!this._view.hasLost(element)) {
+        return other.some((other) => {
+          if (!this._view.hasLost(other)) {
+            return Polygon.areTouching(element, other);
+          }
+        });
+      }
     });
   }
 

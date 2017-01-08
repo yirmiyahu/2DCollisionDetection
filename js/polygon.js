@@ -260,6 +260,11 @@ export default class {
     });
   }
 
+  static areTouching(polygon, other) {
+    return polygon.intersects(other) || polygon.inside(other) ||
+      other.inside(polygon);
+  }
+
   intersects(other) {
     return this._edges.some((edge) => {
       return other.edges.some((otherEdge) => {
@@ -272,11 +277,6 @@ export default class {
     return this._vertices.some((vertex) => {
       return vertex.inside(other);
     });
-  }
-
-  static areTouching(polygon, other) {
-    return polygon.intersects(other) || polygon.inside(other) ||
-      other.inside(polygon);
   }
 
   static flag(collection) {

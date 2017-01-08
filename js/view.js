@@ -40,4 +40,21 @@ export default class {
       });
     }
   }
+
+  hasLost(element) {
+    const { min, max } = element.bounds;
+    const { min: minB, max: maxB } = this._bounds;
+    return max.x <= minB.x || max.y <= minB.y || min.x >= maxB.x ||
+      min.y >= maxB.y;
+  }
+
+  contains(element) {
+    const { min, max } = element.bounds;
+    const { min: minB, max: maxB } = this._bounds;
+    return min.x > minB.x && min.y > minB.y && max.x < maxB.x && max.y < maxB.y;
+  }
+
+  hasOverlapping(element) {
+    return !this.hasLost(element) && !this.contains(element);
+  }
 }

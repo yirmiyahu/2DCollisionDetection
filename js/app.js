@@ -31,7 +31,19 @@ class App {
     this.elements.forEach((element, i, collection) => {
       this.view.render(element);
       element.move();
+      this._handlePossibleSuccession(element, i, collection);
     });
+  }
+
+  _handlePossibleSuccession(element, i, collection) {
+    if (element.clones && element.clones.length > 0) {
+      element.clones.forEach((clone) => {
+        if (this.view.hasOverlapping(clone)) {
+          collection[i] = clone;
+          Polygon.makeTranslatedClones(clone, this.view);
+        }
+      });
+    }
   }
 }
 

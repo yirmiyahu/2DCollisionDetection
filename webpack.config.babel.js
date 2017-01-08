@@ -6,10 +6,10 @@ import path from 'path';
 import webpack from 'webpack';
 
 export default {
-  entry: './js/app.js',
+  entry: './js/bootstrap.js',
   output: {
     path: './dist',
-    filename: './assets/js/app.js'
+    filename: './assets/js/bootstrap.js'
   },
   resolve: {
     root: [

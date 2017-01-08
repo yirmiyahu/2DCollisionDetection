@@ -57,7 +57,9 @@ export default class {
       ignoreBounds: this._ignoreBounds,
       customGlowSettings: this._customGlowSettings
     };
+
     this._pen.draw(element, drawConfig);
+
     if (element.clones.length > 0) {
       element.clones.forEach((clone) => {
         this._pen.draw(clone, drawConfig);
@@ -68,6 +70,7 @@ export default class {
   hasLost(element) {
     const { min, max } = element.bounds;
     const { min: minB, max: maxB } = this._bounds;
+
     return max.x <= minB.x || max.y <= minB.y || min.x >= maxB.x ||
       min.y >= maxB.y;
   }
@@ -80,33 +83,6 @@ export default class {
 
   hasOverlapping(element) {
     return !this.hasLost(element) && !this.contains(element);
-  }
-
-  checkForCollisions(elements) {
-    outer: for (let i = 0; i < elements.length; i++) {
-      const collection = elements[i].clones.concat(elements[i]);
-      Polygon.unflag(collection);
-
-      inner: for (let j = 0; j < elements.length; j++) {
-        if (i === j) {
-          continue inner;
-        }
-
-        const other = elements[j].clones.concat(elements[j]);
-        if (this._collisionBetween(collection, other)) {
-          Polygon.flag(collection);
-          continue outer;
-        }
-      }
-    }
-  }
-
-  _collisionBetween(collection, other) {
-    return collection.some((element) => {
-      return other.some((other) => {
-        return Polygon.areTouching(element, other);
-      });
-    });
   }
 
   generateRandomLocation() {

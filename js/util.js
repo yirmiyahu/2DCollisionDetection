@@ -17,6 +17,7 @@ function isEmpty(arg) {
         return false;
       }
     }
+
     return true;
   }
 
@@ -50,8 +51,10 @@ function random(min, max) {
 
 function debounce(func, wait, immediate) {
   let timeout;
+
   return () => {
     const args = arguments;
+
     const later = () => {
       timeout = null;
       if (!immediate) {
@@ -60,6 +63,7 @@ function debounce(func, wait, immediate) {
     };
 
     const callNow = immediate && !timeout;
+
     if (callNow) {
       func.apply(this, args);
     } else {

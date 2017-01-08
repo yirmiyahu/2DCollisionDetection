@@ -9,9 +9,11 @@ export default class Pen {
     const { ignoreBounds, customGlowSettings } = config;
     this._ctx.save();
     this._strokeAndFill(polygon, customGlowSettings);
+
     if (!ignoreBounds) {
       this._strokeBounds(polygon);
     }
+
     this._ctx.restore();
   }
 
@@ -33,9 +35,11 @@ export default class Pen {
     const [ first, ...rest ] = polygon.vertices;
     this._ctx.beginPath();
     this._ctx.moveTo(first.x, first.y);
+
     rest.forEach((vertex) => {
       this._ctx.lineTo(vertex.x, vertex.y);
     });
+
     this._ctx.closePath();
   }
 

@@ -39,11 +39,9 @@ export default class {
   }
 
   move(vector, angle, pivot) {
-    if (vector && vector instanceof this.constructor) {
-      this._translate(vector);
-    }
+    this._translate(vector);
 
-    if (angle && isNumber(angle)) {
+    if (angle && isNumber(angle) && pivot) {
       this._rotate(angle, pivot);
     }
   }

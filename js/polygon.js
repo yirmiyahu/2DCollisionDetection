@@ -22,10 +22,6 @@ export default class {
     return this._vertices;
   }
 
-  get center() {
-    return this._center;
-  }
-
   get bounds() {
     return this._bounds;
   }
@@ -50,6 +46,7 @@ export default class {
   _computeCenterFrom(vertex, arr) {
     this._center.add(vertex);
     const lastIdx = arr.length - 1;
+
     if (vertex === arr[lastIdx]) {
       this._center.divide(arr.length);
     }
@@ -83,8 +80,10 @@ export default class {
 
   static makeRandom(view) {
     const vertices = this._generateVertices(view);
+
     const canvasSettings = Object.assign(this.paintSettings,
         this.colorSettings());
+
     const movementSettings = this.randomMovementSettings;
     const polygon = new this(vertices, { canvasSettings, movementSettings });
 
@@ -123,6 +122,7 @@ export default class {
 
   static colorSettings(colorString) {
     const color = colorString || Color.generateRandom();
+
     return {
       fillStyle: color,
       strokeStyle: color
@@ -146,6 +146,7 @@ export default class {
     const randomFactor = () => { return posOrNeg() * Math.random(); };
     const angle = Math.PI / 128;
     const vector = 4;
+
     return {
       velocity: new Vector(randomFactor() * vector, randomFactor() * vector),
       angle: randomFactor() * angle
@@ -167,6 +168,7 @@ export default class {
 
   move() {
     this.moveComponents();
+
     if (this._clones.length > 0) {
       this._clones.forEach((clone) => {
         clone.moveComponents();
@@ -196,6 +198,7 @@ export default class {
     this._clearClones(polygon);
     const viewVector = view.bounds.max;
     const vectors = this._computeCloneVectors(polygon, viewVector);
+
     if (vectors) {
       vectors.forEach((vector) => {
         this._replicate(polygon, vector);
@@ -248,9 +251,11 @@ export default class {
     return this._vertices.map((vertex) => {
       const { x, y } = vertex;
       const clonedVertex = new Vector(x, y);
+
       if (translationVector) {
         clonedVertex.add(translationVector);
       }
+
       return clonedVertex;
     });
   }

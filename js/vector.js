@@ -60,4 +60,23 @@ export default class {
     this.x = cos * dx - sin * dy + pivot.x;
     this.y = sin * dx + cos * dy + pivot.y;
   }
+
+  inside(polygon) {
+    const vertices = polygon.vertices;
+    let inside = false;
+
+    for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+      const intersect = this._insideCondition(vertices[i], vertices[j]);
+      if (intersect) {
+        inside = !inside;
+      }
+    }
+
+    return inside;
+  }
+
+  _insideCondition(i, j) {
+    return ((i.y > this.y) !== (j.y > this.y)) && (this.x < (j.x - i.x) *
+      (this.y - i.y) / (j.y - i.y) + i.x);
+  }
 }

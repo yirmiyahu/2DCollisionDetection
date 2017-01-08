@@ -1,3 +1,7 @@
+function inRange(number, lower, upper) {
+  return number >= lower && number <= upper;
+}
+
 function isNumber(numberOrNot) {
   return typeof numberOrNot === 'number';
 }
@@ -40,4 +44,4 @@ function random(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-export { isNumber, isEmpty, isObject, isArray, random };
+export { inRange, isNumber, isEmpty, isObject, isArray, random };

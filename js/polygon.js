@@ -191,4 +191,18 @@ export default class {
       return clonedVertex;
     });
   }
+
+  intersects(other) {
+    return this.edges.some((edge) => {
+      return other.edges.some((otherEdge) => {
+        return Edge.intersects(edge, otherEdge);
+      });
+    });
+  }
+
+  inside(other) {
+    return this.vertices.some((vertex) => {
+      return vertex.inside(other);
+    });
+  }
 }

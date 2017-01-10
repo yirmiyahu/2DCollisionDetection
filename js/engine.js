@@ -132,7 +132,9 @@ export default class {
   }
 
   _changeLabelColor(checked) {
-    this._d.querySelectorAll('label').forEach((label) => {
+    const selectors = this._d.querySelectorAll('label');
+
+    Array.prototype.slice.call(selectors, 0).forEach((label) => {
       const classList = label.classList;
       const className = 'panel__checkbox-label--readable';
       if (checked) {

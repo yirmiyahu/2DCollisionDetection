@@ -1,6 +1,6 @@
 import Polygon from 'polygon';
 import Vector from 'vector';
-import { isNumber } from 'util';
+import isNumber from 'lodash/isNumber';
 
 function collisionSandbox() {
   const enclosingPolygon = new Polygon([
@@ -45,18 +45,6 @@ function collisionSandbox() {
   };
 }
 
-function greaterThanOrEqualTo(arg, test) {
-  if (isNumber(arg) && isNumber(test)) {
-    return arg >= test;
-  }
-}
-
-function lessThanOrEqualTo(arg, test) {
-  if (isNumber(arg) && isNumber(test)) {
-    return arg <= test;
-  }
-}
-
 function randomTriangle() {
   return new Polygon([randomVector(), randomVector(), randomVector()]);
 }
@@ -67,8 +55,6 @@ function randomVector() {
 
 export {
   collisionSandbox,
-  greaterThanOrEqualTo,
-  lessThanOrEqualTo,
   randomTriangle,
   randomVector
 };

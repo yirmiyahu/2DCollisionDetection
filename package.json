@@ -12,8 +12,8 @@
     "autoprefixer": "^6.5.3",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
+    "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
-    "babel-polyfill": "^6.20.0",
     "babel-preset-latest": "^6.16.0",
     "clean-css": "^3.4.21",
     "color-scheme": "0.0.5",
@@ -26,8 +26,12 @@
     "karma-jasmine": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-webpack": "^1.8.1",
+    "lodash-webpack-plugin": "^0.10.7",
     "postcss-loader": "^1.1.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
   }
 }

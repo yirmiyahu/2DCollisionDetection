@@ -1,7 +1,9 @@
 import Color from 'color';
 import Edge from 'edge';
 import Vector from 'vector';
-import { isEmpty, random } from 'util';
+import isEmpty from 'lodash/isEmpty';
+import random from 'lodash/random';
+import sample from 'lodash/sample';
 
 export default class {
   constructor(vertices, config) {
@@ -142,7 +144,7 @@ export default class {
   }
 
   static get randomMovementSettings() {
-    const posOrNeg = () => { return random([-1, 1]); };
+    const posOrNeg = () => { return sample([-1, 1]); };
     const randomFactor = () => { return posOrNeg() * Math.random(); };
     const angle = Math.PI / 128;
     const vector = 4;

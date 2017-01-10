@@ -1,4 +1,5 @@
-import { debounce, isFunction } from 'util';
+import isFunction from 'lodash/isFunction';
+import { debounce } from 'util';
 
 export default class {
   constructor(d, router) {

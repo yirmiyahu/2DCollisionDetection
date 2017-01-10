@@ -1,5 +1,5 @@
 import ColorScheme from 'color-scheme';
-import { random } from 'util';
+import random from 'lodash/random';
 
 const Color = {
   generateRandom() {

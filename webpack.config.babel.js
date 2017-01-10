@@ -1,6 +1,7 @@
 import ExtractTextWebpackPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackInlineSourcePlugin from 'html-webpack-inline-source-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import LodashModuleReplacementPlugin from 'lodash-webpack-plugin';
 import autoprefixer from 'autoprefixer';
 import path from 'path';
 import webpack from 'webpack';
@@ -31,6 +32,7 @@ export default {
     return [autoprefixer];
   },
   plugins: [
+    new LodashModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: '2D Collision Detection',
       template: './index.html',

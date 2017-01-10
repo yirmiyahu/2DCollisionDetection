@@ -1,4 +1,4 @@
-import { isNumber } from 'util';
+import isNumber from 'lodash/isNumber';
 
 export default class {
   constructor(x, y) {

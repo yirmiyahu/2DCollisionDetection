@@ -1,6 +1,6 @@
 import Polygon from 'polygon';
 import Vector from 'vector';
-import { random } from 'util';
+import random from 'lodash/random';
 import { collisionSandbox, randomVector } from 'helper';
 
 describe('Vector', () => {

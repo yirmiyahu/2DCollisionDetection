@@ -1,4 +1,4 @@
-import { inRange } from 'util';
+import { inRangeInclusive } from 'util';
 
 export default class {
   constructor(firstPoint, secondPoint) {
@@ -16,7 +16,7 @@ export default class {
     const v = this._computeDivisor(s, t);
     const a = this._computeDeterminant(s, u, v);
     const b = this._computeDeterminant(t, u, v);
-    return inRange(a, 0, 1) && inRange(b, 0, 1);
+    return inRangeInclusive(a, 0, 1) && inRangeInclusive(b, 0, 1);
   }
 
   static _computeSegment(edge, other) {

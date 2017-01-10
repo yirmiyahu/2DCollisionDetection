@@ -56,19 +56,26 @@ export default class {
   _checkForCollisions() {
     const elements = this._elements;
     const inView = (clone) => { return !this._view.hasLost(clone); };
-    outer: for (let i = 0; i < elements.length; i++) {
-      const collection = elements[i].clones.filter(inView).concat(elements[i]);
+    const collections = {};
+
+    elements.forEach((element, i) => {
+      const collection = element.clones.filter(inView).concat(element);
+      collections[i] = collection;
       Polygon.unflag(collection);
+    });
 
-      inner: for (let j = 0; j < elements.length; j++) {
-        if (i === j) {
-          continue inner;
-        }
+    for (let i = 0; i < elements.length - 1; i++) {
+      const collection = collections[i];
 
-        const other = elements[j].clones.filter(inView).concat(elements[j]);
+      for (let j = i + 1; j < elements.length; j++) {
+        const other = collections[j];
+
         if (this._collisionBetween(collection, other)) {
-          Polygon.flag(collection);
-          continue outer;
+          if (!elements[i].inContact) {
+            Polygon.flag(collection);
+          }
+
+          Polygon.flag(other);
         }
       }
     }
